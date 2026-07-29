@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://konohito.github.io/cargolex-hp/sitemap.xml
