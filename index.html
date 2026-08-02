@@ -33,8 +33,24 @@
 .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center}
 .row{display:flex;justify-content:space-between;gap:18px;padding:12px 0;border-top:1px solid var(--color-divider)}
 .num{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:46px;line-height:.9;color:var(--color-accent-300)}
+.kanban{position:relative;overflow:hidden;background:#fff;border:1px solid var(--color-divider);padding:clamp(26px,4vw,46px) clamp(22px,4vw,46px) clamp(30px,4vw,46px)}
+.kanban-wave{position:absolute;top:0;left:0;width:100%;height:clamp(130px,18vw,215px);pointer-events:none}
+.kanban-grid{position:relative;display:grid;grid-template-columns:minmax(190px,270px) 1fr;gap:clamp(24px,4vw,54px);align-items:center}
+.kanban-left{display:grid;justify-items:center;gap:20px}
+.kanban-left img{width:clamp(160px,19vw,235px);height:auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.14))}
+.kanban-logo{background:var(--color-accent-900);border:3px solid var(--yl);border-radius:16px;padding:10px 34px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:clamp(26px,3vw,36px);letter-spacing:.06em;line-height:1.15;color:#fff;-webkit-text-stroke:.8px var(--yl);text-shadow:0 0 6px rgba(247,209,23,.45)}
+.kanban-catch{font-weight:900;font-size:clamp(16px,2vw,21px);letter-spacing:.1em}
+.kanban-name{font-weight:900;font-size:clamp(34px,4.6vw,52px);line-height:1.15;letter-spacing:.02em;margin-top:2px}
+.kanban-tel{display:inline-flex;align-items:center;gap:14px;margin-top:14px;color:var(--red)}
+.kanban-free{background:var(--red);color:#fff;font-weight:800;font-size:clamp(13px,1.4vw,17px);letter-spacing:.06em;border-radius:999px;padding:9px 17px}
+.kanban-telno{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:clamp(34px,5.6vw,62px);letter-spacing:.03em;line-height:1;white-space:nowrap}
+.kanban-list{display:grid;grid-template-columns:1fr 1fr;gap:11px 34px;margin:24px 0 0;padding:0;list-style:none}
+.kanban-list li{display:flex;align-items:baseline;gap:11px;font-weight:700;font-size:clamp(14px,1.4vw,16.5px)}
+.kanban-list li::before{content:"";flex:none;width:11px;height:11px;border-radius:50%;background:var(--color-accent);transform:translateY(1px)}
 @media (max-width:1024px){.g3{grid-template-columns:repeat(2,1fr)}.hero,.split{grid-template-columns:1fr;gap:34px}.h2{font-size:31px}.sec{padding-top:62px}}
+@media (max-width:760px){.kanban-grid{grid-template-columns:1fr;gap:26px}.kanban-list{gap:9px 18px}}
 @media (max-width:640px){.g2,.g3{grid-template-columns:1fr;gap:18px}.h2{font-size:27px}.sec{padding-top:50px}}
+@media (max-width:480px){.kanban-list{grid-template-columns:1fr}}
 </style>
 <script type="application/ld+json">
 {
@@ -164,6 +180,37 @@
       <div class="kick">Fair price</div>
       <h3 style="font-size:27px;margin:8px 0 6px">適正価格</h3>
       <p style="font-size:13.5px;line-height:1.85;margin:0;opacity:.78">距離制運賃をそのまま公開。お見積り以上のご請求はいたしません。</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" style="padding-top:56px">
+  <div class="kanban">
+    <svg class="kanban-wave" viewBox="0 0 1200 215" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 0 H1200 V70 C1030 130 860 40 660 66 C440 94 220 200 0 165 Z" fill="#fbe08a"/>
+      <path d="M0 0 H1200 V38 C1010 96 850 12 650 36 C430 62 210 150 0 118 Z" fill="#f2b93b"/>
+    </svg>
+    <div class="kanban-grid">
+      <div class="kanban-left">
+        <img src="assets/img/mascot.png" alt="カーゴレックスのマスコット" width="437" height="460" loading="lazy">
+        <div class="kanban-logo">CARGOLEX</div>
+      </div>
+      <div>
+        <div class="kanban-catch">くらしの便利サービス</div>
+        <div class="kanban-name">カーゴレックス</div>
+        <a class="kanban-tel" href="tel:0120542587">
+          <span class="kanban-free">Free</span>
+          <span class="kanban-telno">0120-542-587</span>
+        </a>
+        <ul class="kanban-list">
+          <li>引越</li><li>緊急配送</li>
+          <li>エアコン工事</li><li>貸切便</li>
+          <li>引越ゴミ処理</li><li>定期便</li>
+          <li>ハウスクリーニング</li><li>配送助手</li>
+          <li>草刈・剪定</li><li>家財・家電の配送</li>
+          <li>水回りメンテナンス</li><li>家具移動</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
