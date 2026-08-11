@@ -23,13 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Generate blog index
-        run: |
-          python3 -c "
-          import json, glob, os
-          files = sorted((os.path.basename(f) for f in glob.glob('blog/posts/*.md')), reverse=True)
-          json.dump(list(files), open('blog/posts/index.json', 'w'), ensure_ascii=False)
-          "
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
