@@ -6,4 +6,7 @@
   <url><loc>https://konohito.github.io/cargolex-hp/price.html</loc><priority>0.8</priority></url>
   <url><loc>https://konohito.github.io/cargolex-hp/company.html</loc><priority>0.6</priority></url>
   <url><loc>https://konohito.github.io/cargolex-hp/contact.html</loc><priority>0.8</priority></url>
+  <url><loc>https://konohito.github.io/cargolex-hp/blog/</loc><priority>0.7</priority></url>
+  <url><loc>https://konohito.github.io/cargolex-hp/blog/niwa-nagare.html</loc><lastmod>2026-09-05</lastmod><priority>0.6</priority></url>
+  <url><loc>https://konohito.github.io/cargolex-hp/blog/blog-start.html</loc><lastmod>2026-09-04</lastmod><priority>0.6</priority></url>
 </urlset>
