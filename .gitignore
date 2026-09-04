@@ -1,0 +1,3 @@
+# ブログの生成物（tools/build_blog.py がデプロイ時に生成する）
+/blog/*.html
+/feed.xml

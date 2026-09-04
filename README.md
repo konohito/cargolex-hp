@@ -6,7 +6,7 @@
 
 ## 構成
 
-依存ライブラリ・ビルド工程なしの静的サイトです。
+依存ライブラリなしの静的サイトです。ブログのみ、公開時にPythonで生成します。
 
 | ファイル | 内容 |
 | --- | --- |
@@ -16,14 +16,30 @@
 | `price.html` | 料金表 |
 | `company.html` | 会社概要 |
 | `contact.html` | お問い合わせ（フォーム＋FAQ） |
+| `blog/posts/*.md` | ブログ記事の原稿（**編集するのはここだけ**） |
+| `tools/build_blog.py` | ブログ生成スクリプト |
 | `css/site.css` | 共通スタイル（トークン・コンポーネント・ヘッダー/フッター・レスポンシブ） |
 | `js/site.js` | モバイルナビ・ヘッダー影・お問い合わせフォーム |
 | `assets/img/` | 最適化済み画像（WebP）・アイコン・OGP画像 |
 
+## ブログ
+
+記事の書き方は [BLOG_HOWTO.md](BLOG_HOWTO.md) を参照してください。
+
+`blog/posts/*.md` から、公開時に `tools/build_blog.py` が次を生成します
+（生成物はリポジトリに含めず、`.gitignore` で除外しています）。
+
+- `blog/index.html`（一覧・9件ごとのページ送り）
+- `blog/<スラッグ>.html`（記事ページ／OGP・JSON-LD・前後記事ナビつき）
+- `feed.xml`（RSS）、`sitemap.xml`、トップページの最新記事3件
+
+ヘッダー・フッターは `person.html` から取り出して使うため、ナビを変更すると
+ブログ側にも自動で反映されます。ローカルで確認する場合は `python3 tools/build_blog.py` を実行します。
+
 ## 公開（デプロイ）
 
 `main` ブランチへ push すると、GitHub Actions（`.github/workflows/deploy.yml`）が
-GitHub Pages へ自動デプロイします。
+ブログを生成したうえで GitHub Pages へ自動デプロイします。
 
 ## お問い合わせフォームの送信先設定
 
