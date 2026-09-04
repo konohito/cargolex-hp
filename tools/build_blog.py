@@ -22,7 +22,20 @@ from datetime import datetime, timezone, timedelta
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 POSTS_DIR = os.path.join(ROOT, "blog", "posts")
 OUT_DIR = os.path.join(ROOT, "blog")
-BASE_URL = "https://konohito.github.io/cargolex-hp/"
+
+
+def site_base_url() -> str:
+    """独自ドメイン（CNAMEファイル）があればそちらを使う。なければ GitHub Pages のURL。"""
+    cname = os.path.join(ROOT, "CNAME")
+    if os.path.exists(cname):
+        with open(cname, encoding="utf-8") as f:
+            domain = f.read().strip()
+        if domain:
+            return "https://%s/" % domain.rstrip("/")
+    return "https://konohito.github.io/cargolex-hp/"
+
+
+BASE_URL = site_base_url()
 SITE_NAME = "カーゴレックス"
 PER_PAGE = 9
 DEFAULT_OG = "assets/img/og-image.jpg"
@@ -119,7 +132,7 @@ def render_markdown(md: str) -> str:
         if m:
             flush_all()
             # 記事タイトル（# ）は別途ページ見出しにするので本文では h3 相当から始める
-            level = min(len(m.group(1)) + 2, 5)
+            level = min(max(len(m.group(1)) + 1, 3), 5)
             out.append("<h%d>%s</h%d>" % (level, inline(m.group(2)), level))
             continue
         m = re.match(r"^&gt;\s?(.*)$", line)  # 引用（> はエスケープ済み）
@@ -129,7 +142,7 @@ def render_markdown(md: str) -> str:
             flush_ol()
             quote.append(m.group(1))
             continue
-        m = re.match(r"^(?:[-*・]|・)\s*(.+)$", line)
+        m = re.match(r"^(?:[-*]\s+|・\s*)(.+)$", line)
         if m:
             flush_para()
             flush_ol()

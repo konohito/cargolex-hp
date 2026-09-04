@@ -16,7 +16,8 @@
 | `price.html` | 料金表 |
 | `company.html` | 会社概要 |
 | `contact.html` | お問い合わせ（フォーム＋FAQ） |
-| `blog/posts/*.md` | ブログ記事の原稿（**編集するのはここだけ**） |
+| `blog/posts/*.md` | ブログ記事の原稿 |
+| `admin.html` / `js/admin.js` | ブログ投稿画面（GitHub Contents API 経由で記事を作成・更新・削除） |
 | `tools/build_blog.py` | ブログ生成スクリプト |
 | `css/site.css` | 共通スタイル（トークン・コンポーネント・ヘッダー/フッター・レスポンシブ） |
 | `js/site.js` | モバイルナビ・ヘッダー影・お問い合わせフォーム |
@@ -24,7 +25,11 @@
 
 ## ブログ
 
-記事の書き方は [BLOG_HOWTO.md](BLOG_HOWTO.md) を参照してください。
+記事は投稿画面（`admin.html`）から書けます。書き方は [BLOG_HOWTO.md](BLOG_HOWTO.md) を参照してください。
+
+投稿画面は fine-grained personal access token（Contents: Read and write）を
+ブラウザの localStorage に保存し、GitHub の Contents API を直接呼びます。
+サーバーは不要で、`noindex` のため検索結果には出ません。
 
 `blog/posts/*.md` から、公開時に `tools/build_blog.py` が次を生成します
 （生成物はリポジトリに含めず、`.gitignore` で除外しています）。
@@ -35,6 +40,10 @@
 
 ヘッダー・フッターは `person.html` から取り出して使うため、ナビを変更すると
 ブログ側にも自動で反映されます。ローカルで確認する場合は `python3 tools/build_blog.py` を実行します。
+
+サイトのURL（canonical・OGP・sitemap・RSS）は、リポジトリ直下に `CNAME` があれば
+その独自ドメインを、なければ GitHub Pages のURLを使います。独自ドメインへ移す際は
+`CNAME` を置くだけで全ページのURLが切り替わります。
 
 ## 公開（デプロイ）
 

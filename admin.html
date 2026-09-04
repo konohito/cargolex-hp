@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ブログ投稿画面｜カーゴレックス</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#123f28">
+<link rel="icon" type="image/png" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&amp;family=Barlow:wght@400;500;700&amp;family=Noto+Sans+JP:wght@400;500;700;900&amp;display=swap">
+<link rel="stylesheet" href="css/site.css">
+<style>
+body { padding-bottom: 40px; }
+.adm-bar { background: var(--color-accent-900); color: #eef1ec; }
+.adm-bar-in { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 0; }
+.adm-bar img { width: 34px; height: 34px; object-fit: contain; }
+.adm-bar strong { font-size: 16px; letter-spacing: .02em; }
+.adm-bar .adm-bar-links { margin-left: auto; display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; }
+.adm-bar a { color: var(--color-accent-300); }
+.adm-sec { padding-top: 30px; }
+.adm-card { background: #fff; border: 1px solid var(--color-divider); padding: 24px; }
+.adm-card + .adm-card { margin-top: 18px; }
+.adm-h { font-size: 21px; margin: 0 0 6px; }
+.adm-note { font-size: 13px; line-height: 1.9; color: color-mix(in srgb, var(--color-text) 62%, transparent); margin: 0 0 18px; }
+.adm-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.adm-tab { padding: 10px 20px; border: 1px solid var(--color-divider); background: #fff; font-size: 14px; font-weight: 700; cursor: pointer; color: var(--color-text); }
+.adm-tab.on { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.adm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.adm-field { display: grid; gap: 6px; margin-bottom: 16px; }
+.adm-field label { font-size: 12.5px; font-weight: 700; }
+.adm-field .hint { font-size: 11.5px; color: color-mix(in srgb, var(--color-text) 58%, transparent); line-height: 1.7; }
+.adm-input, .adm-textarea, .adm-select {
+  width: 100%; border: 1px solid var(--color-divider); background: #fff; padding: 11px 13px;
+  font-family: inherit; font-size: 15px; color: var(--color-text); border-radius: 0;
+}
+.adm-input:focus, .adm-textarea:focus { outline: 2px solid var(--color-accent-300); outline-offset: -1px; }
+.adm-textarea { min-height: 340px; line-height: 1.9; resize: vertical; }
+.adm-tools { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.adm-tool { padding: 7px 11px; font-size: 12.5px; font-weight: 700; border: 1px solid var(--color-divider); background: var(--color-neutral-100); cursor: pointer; color: var(--color-text); }
+.adm-tool:hover { border-color: var(--color-accent); color: var(--color-accent-700); }
+.adm-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.adm-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.adm-msg { padding: 13px 16px; font-size: 13.5px; line-height: 1.85; margin: 0 0 18px; border: 1px solid; }
+.adm-msg.ok { background: var(--color-accent-100); border-color: var(--color-accent-300); }
+.adm-msg.err { background: #fbe9ec; border-color: var(--red); }
+.adm-msg.info { background: rgba(247, 209, 23, .16); border-color: rgba(199, 166, 10, .55); }
+.adm-preview { border: 1px solid var(--color-divider); background: #fff; padding: 22px 24px; max-height: 640px; overflow-y: auto; }
+.adm-preview-title { font-size: 23px; line-height: 1.45; margin: 8px 0 0; }
+.adm-cover { margin-top: 12px; }
+.adm-cover img { max-width: 100%; height: auto; border: 1px solid var(--color-divider); display: block; }
+.adm-list { display: grid; gap: 0; }
+.adm-item { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-top: 1px solid var(--color-divider); flex-wrap: wrap; }
+.adm-item:last-child { border-bottom: 1px solid var(--color-divider); }
+.adm-item-main { flex: 1; min-width: 200px; display: grid; gap: 4px; }
+.adm-item-main strong { font-size: 15px; line-height: 1.5; }
+.adm-item-main span { font-size: 12px; color: color-mix(in srgb, var(--color-text) 58%, transparent); }
+.adm-mini { padding: 8px 14px; font-size: 13px; font-weight: 700; border: 1px solid var(--color-divider); background: #fff; cursor: pointer; color: var(--color-text); }
+.adm-mini:hover { border-color: var(--color-accent); color: var(--color-accent-700); }
+.adm-mini.danger:hover { border-color: var(--red); color: var(--red7); }
+.adm-steps { margin: 0 0 18px; padding-left: 22px; }
+.adm-steps li { font-size: 14px; line-height: 1.95; margin-bottom: 10px; }
+.adm-steps code { background: var(--color-neutral-100); padding: 2px 6px; font-size: 13px; word-break: break-all; }
+.adm-busy { opacity: .55; pointer-events: none; }
+[hidden] { display: none !important; }
+@media (max-width: 900px) { .adm-grid { grid-template-columns: 1fr; } .adm-textarea { min-height: 260px; } }
+</style>
+</head>
+<body>
+
+<div class="adm-bar">
+  <div class="wrap adm-bar-in">
+    <img src="assets/img/mascot.png" alt="">
+    <strong>ブログ投稿画面</strong>
+    <span class="adm-bar-links">
+      <a href="blog/" target="_blank" rel="noopener">ブログを見る</a>
+      <a href="index.html">ホームページへ</a>
+      <a href="#" id="signout" hidden>サインアウト</a>
+    </span>
+  </div>
+</div>
+
+<main class="wrap adm-sec">
+
+  <!-- ===== トークン設定 ===== -->
+  <section id="setup" hidden>
+    <div class="adm-card">
+      <h1 class="adm-h">はじめに：接続キーの設定（初回のみ）</h1>
+      <p class="adm-note">この画面から記事を投稿するために、GitHubの「接続キー」を1回だけ登録します。登録したキーはこの端末のブラウザにのみ保存され、外部には送信されません。</p>
+      <div id="setup-msg"></div>
+      <ol class="adm-steps">
+        <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener"><strong>こちらのページ</strong></a>を開きます（GitHubにログインしてください）。</li>
+        <li><strong>Token name</strong> に <code>cargolex-blog</code> と入力します。</li>
+        <li><strong>Expiration</strong>（有効期限）で <code>No expiration</code> または長めの期間を選びます。</li>
+        <li><strong>Repository access</strong> で <code>Only select repositories</code> を選び、<code>konohito/cargolex-hp</code> を選びます。</li>
+        <li><strong>Permissions</strong> → <strong>Repository permissions</strong> の中の <code>Contents</code> を <code>Read and write</code> にします。</li>
+        <li>一番下の <strong>Generate token</strong> を押し、表示された <code>github_pat_…</code> をコピーします。</li>
+        <li>下の欄に貼り付けて「保存して接続する」を押してください。</li>
+      </ol>
+      <div class="adm-field">
+        <label for="token">接続キー（Personal access token）</label>
+        <input class="adm-input" id="token" type="password" autocomplete="off" placeholder="github_pat_…">
+        <span class="hint">この画面は検索エンジンに載りません。キーを知らない人は投稿できません。</span>
+      </div>
+      <div class="adm-actions">
+        <button class="btn btn-primary blueprint" id="save-token" type="button" style="padding:13px 26px;font-size:15px">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          保存して接続する
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 管理画面 ===== -->
+  <section id="app" hidden>
+    <div class="adm-tabs">
+      <button class="adm-tab on" id="tab-write" type="button">記事を書く</button>
+      <button class="adm-tab" id="tab-list" type="button">記事の管理</button>
+    </div>
+
+    <!-- 記事を書く -->
+    <div id="pane-write">
+      <div id="msg"></div>
+      <div class="adm-grid">
+        <div class="adm-card">
+          <div class="adm-field">
+            <label for="f-title">タイトル<span style="color:var(--red7)"> ※必須</span></label>
+            <input class="adm-input" id="f-title" type="text" placeholder="例：お庭の草刈をしてきました">
+          </div>
+          <div class="adm-row">
+            <div class="adm-field" style="flex:1;min-width:150px">
+              <label for="f-date">日付</label>
+              <input class="adm-input" id="f-date" type="date">
+            </div>
+            <div class="adm-field" style="flex:1;min-width:180px">
+              <label for="f-category">カテゴリ</label>
+              <input class="adm-input" id="f-category" type="text" list="cats" placeholder="お庭の草刈・剪定">
+              <datalist id="cats">
+                <option value="お庭の草刈・剪定"></option>
+                <option value="お引越し"></option>
+                <option value="エアコン工事"></option>
+                <option value="ハウスクリーニング"></option>
+                <option value="お片付け・運搬"></option>
+                <option value="お知らせ"></option>
+              </datalist>
+            </div>
+          </div>
+          <div class="adm-field">
+            <label for="f-slug">記事のURL名（半角英数字とハイフン）</label>
+            <input class="adm-input" id="f-slug" type="text" placeholder="niwa-kusakari">
+            <span class="hint">記事のアドレスに使われます。日本語は使えません。空欄なら自動でつけます。</span>
+          </div>
+          <div class="adm-field">
+            <label>アイキャッチ写真（一覧と記事の先頭に出ます）</label>
+            <div class="adm-row">
+              <input type="file" id="f-cover-file" accept="image/*" style="font-size:13px">
+              <button class="adm-mini" id="f-cover-clear" type="button">写真を外す</button>
+            </div>
+            <span class="hint">スマホの写真でOKです。自動で軽くしてからアップロードします。</span>
+            <div class="adm-cover" id="cover-preview" hidden><img id="cover-img" src="" alt=""></div>
+          </div>
+          <div class="adm-field">
+            <label for="f-body">本文</label>
+            <div class="adm-tools">
+              <button class="adm-tool" type="button" data-ins="h">見出し</button>
+              <button class="adm-tool" type="button" data-ins="li">箇条書き</button>
+              <button class="adm-tool" type="button" data-ins="b">太字</button>
+              <button class="adm-tool" type="button" data-ins="a">リンク</button>
+              <button class="adm-tool" type="button" id="ins-img">本文に写真を入れる</button>
+            </div>
+            <textarea class="adm-textarea" id="f-body" placeholder="ここに本文を書きます。&#10;&#10;空の行を1つ入れると段落が分かれます。"></textarea>
+            <input type="file" id="body-img-file" accept="image/*" hidden>
+          </div>
+          <div class="adm-actions">
+            <button class="btn btn-primary blueprint" id="publish" type="button" style="padding:14px 28px;font-size:15px">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <span id="publish-label">この内容で公開する</span>
+            </button>
+            <button class="btn btn-secondary" id="cancel-edit" type="button" style="padding:14px 24px;font-size:15px;border-radius:0" hidden>編集をやめる</button>
+          </div>
+          <p class="adm-note" style="margin:16px 0 0">公開ボタンを押すと、1〜2分でホームページに反映されます。</p>
+        </div>
+
+        <div>
+          <div class="adm-preview">
+            <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">Preview</div>
+            <div class="blog-meta" style="margin-top:12px"><span class="blog-date" id="p-date"></span><span class="blog-cat" id="p-cat" hidden></span></div>
+            <h2 class="adm-preview-title" id="p-title">タイトルを入力してください</h2>
+            <div class="adm-cover" id="p-cover" hidden><img id="p-cover-img" src="" alt=""></div>
+            <div class="blog-body" id="p-body" style="margin-top:20px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 記事の管理 -->
+    <div id="pane-list" hidden>
+      <div class="adm-card">
+        <h2 class="adm-h">投稿済みの記事</h2>
+        <p class="adm-note">記事を選んで書き直したり、削除したりできます。</p>
+        <div id="list-msg"></div>
+        <div class="adm-list" id="list"></div>
+        <div class="adm-actions" style="margin-top:20px">
+          <button class="adm-mini" id="reload-list" type="button">一覧を読み込み直す</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/admin.js" defer></script>
+</body>
+</html>
