@@ -1,6 +1,6 @@
 /* ブログ投稿画面
- * GitHub の Contents API を直接呼んで blog/posts/*.md を作成・更新・削除する。
- * 接続キー（fine-grained personal access token）は、この端末の localStorage にのみ保存する。
+ * GitHub の Contents API を直接呼んで blog/posts/*.md と写真を作成・更新・削除する。
+ * ログインキー（personal access token）は、この端末の localStorage にのみ保存する。
  */
 (function () {
   'use strict';
@@ -16,9 +16,9 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var token = '';
-  var editing = null;          // 編集中の記事 {path, sha, slug}
-  var pendingImages = [];      // 未アップロードの画像 [{path, blob, url}]
-  var coverPath = '';          // アイキャッチのパス（assets/img/... ）
+  var editing = null;   // 編集中の記事 {path, sha}
+  var photos = [];      // [{path, url, blob?, uploaded}]
+  var coverPath = '';
 
   // ---------------------------------------------------------------- 共通
 
@@ -49,10 +49,10 @@
   }
 
   function apiError(status, body) {
-    if (status === 401) return '接続キーが正しくないか、期限が切れています。「サインアウト」して登録し直してください。';
-    if (status === 403) return '権限が足りません。接続キーの Contents が「Read and write」になっているか確認してください。';
-    if (status === 404) return 'リポジトリにアクセスできません。接続キーの対象リポジトリに konohito/cargolex-hp が入っているか確認してください。';
-    if (status === 409 || status === 422) return '保存できませんでした。別の場所で同じ記事が更新された可能性があります。一覧を読み込み直してからお試しください。';
+    if (status === 401) return 'ログインキーが正しくないか、期限が切れています。右上の「サインアウト」から登録し直してください。';
+    if (status === 403) return '権限が足りません。ログインキーを作るときに権限（repo または Contents の Read and write）が入っているかご確認ください。';
+    if (status === 404) return 'ホームページのデータにアクセスできません。ログインキーの対象に konohito/cargolex-hp が入っているかご確認ください。';
+    if (status === 409 || status === 422) return '保存できませんでした。別の場所で同じ記事が更新された可能性があります。「記事の管理」から読み込み直してお試しください。';
     var detail = body && body.message ? '（' + esc(body.message) + '）' : '';
     return '通信に失敗しました' + detail + '。しばらく待ってからもう一度お試しください。';
   }
@@ -90,7 +90,7 @@
     return '/repos/' + OWNER + '/' + REPO + '/contents/' + p;
   }
 
-  // ------------------------------------------------------- Markdown（表示用）
+  // ------------------------------------------------------- Markdown（プレビュー）
 
   var SAFE = /^(https?:\/\/|mailto:|tel:|#|\/)/;
 
@@ -102,8 +102,8 @@
   }
 
   function localUrl(path) {
-    for (var i = 0; i < pendingImages.length; i++) {
-      if (pendingImages[i].path === path) return pendingImages[i].url;
+    for (var i = 0; i < photos.length; i++) {
+      if (photos[i].path === path) return photos[i].url;
     }
     return path;
   }
@@ -149,14 +149,17 @@
     return out.join('');
   }
 
-  // ---------------------------------------------------------------- 画像
+  // ---------------------------------------------------------------- 写真
 
   function loadImage(file) {
     return new Promise(function (resolve, reject) {
       var img = new Image();
       var url = URL.createObjectURL(file);
       img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
-      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('画像を読み込めませんでした。')); };
+      img.onerror = function () {
+        URL.revokeObjectURL(url);
+        reject(new Error('「' + (file.name || '写真') + '」を読み込めませんでした。JPEGまたはPNGの写真をお試しください。'));
+      };
       img.src = url;
     });
   }
@@ -177,7 +180,7 @@
       ctx.drawImage(img, 0, 0, cw, ch);
       return new Promise(function (resolve, reject) {
         canvas.toBlob(function (blob) {
-          blob ? resolve(blob) : reject(new Error('画像を変換できませんでした。'));
+          blob ? resolve(blob) : reject(new Error('写真を変換できませんでした。'));
         }, 'image/jpeg', 0.82);
       });
     });
@@ -187,7 +190,7 @@
     return new Promise(function (resolve, reject) {
       var fr = new FileReader();
       fr.onload = function () { resolve(String(fr.result).split(',')[1]); };
-      fr.onerror = function () { reject(new Error('画像を読み込めませんでした。')); };
+      fr.onerror = function () { reject(new Error('写真を読み込めませんでした。')); };
       fr.readAsDataURL(blob);
     });
   }
@@ -196,33 +199,87 @@
     var d = new Date();
     var p = function (n) { return String(n).padStart(2, '0'); };
     var rand = Math.random().toString(36).slice(2, 6);
-    return 'blog-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + rand + '.jpg';
+    return 'blog-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' +
+      p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()) + '-' + rand + '.jpg';
   }
 
-  function stageImage(file) {
-    return shrink(file).then(function (blob) {
-      var path = IMG_DIR + '/' + newImageName();
-      var item = { path: path, blob: blob, url: URL.createObjectURL(blob) };
-      pendingImages.push(item);
-      return item;
+  function renderPhotos() {
+    var box = $('photo-list');
+    $('photo-hint').hidden = photos.length === 0;
+    box.innerHTML = photos.map(function (ph, i) {
+      var isCover = ph.path === coverPath;
+      return '<div class="adm-photo' + (isCover ? ' is-cover' : '') + '">' +
+        '<div class="adm-photo-img"><img src="' + esc(ph.url) + '" alt="">' +
+        (isCover ? '<span class="adm-badge">アイキャッチ</span>' : '') + '</div>' +
+        '<div class="adm-photo-acts">' +
+        (isCover ? '' : '<button type="button" data-cover="' + i + '">アイキャッチにする</button>') +
+        '<button type="button" data-insert="' + i + '">本文に入れる</button>' +
+        '<button type="button" class="danger" data-remove="' + i + '">削除</button>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  function addFiles(files) {
+    var list = Array.prototype.slice.call(files || []).filter(function (f) {
+      return f && /^image\//.test(f.type || '');
+    });
+    if (!list.length) return;
+    show($('msg'), '写真を準備しています…（' + list.length + '枚）', 'info');
+
+    list.reduce(function (chain, file) {
+      return chain.then(function () {
+        return shrink(file).then(function (blob) {
+          var item = {
+            path: IMG_DIR + '/' + newImageName(),
+            blob: blob,
+            url: URL.createObjectURL(blob),
+            uploaded: false
+          };
+          photos.push(item);
+          if (!coverPath) coverPath = item.path;
+        });
+      });
+    }, Promise.resolve()).then(function () {
+      renderPhotos();
+      updatePreview();
+      saveDraft();
+      show($('msg'), '写真を' + list.length + '枚追加しました。公開ボタンを押すとアップロードされます。', 'ok');
+    }).catch(function (err) {
+      renderPhotos();
+      updatePreview();
+      show($('msg'), esc(err.message), 'err');
     });
   }
 
-  function uploadPending() {
-    if (!pendingImages.length) return Promise.resolve();
-    var queue = pendingImages.slice();
-    return queue.reduce(function (chain, item) {
+  function removePhoto(i) {
+    var ph = photos[i];
+    if (!ph) return;
+    if (ph.path === coverPath) coverPath = '';
+    // 本文からも取り除く
+    var re = new RegExp('!\\[[^\\]]*\\]\\(' + ph.path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\)\\n?', 'g');
+    $('f-body').value = $('f-body').value.replace(re, '');
+    if (!ph.uploaded && ph.url) URL.revokeObjectURL(ph.url);
+    photos.splice(i, 1);
+    if (!coverPath && photos.length) coverPath = photos[0].path;
+    renderPhotos();
+    updatePreview();
+    saveDraft();
+  }
+
+  function uploadPhotos() {
+    var pending = photos.filter(function (p) { return !p.uploaded && p.blob; });
+    if (!pending.length) return Promise.resolve();
+    return pending.reduce(function (chain, item, idx) {
       return chain.then(function () {
+        show($('msg'), '写真をアップロードしています…（' + (idx + 1) + '/' + pending.length + '）', 'info');
         return blobToBase64(item.blob).then(function (b64) {
           return api(repoPath(item.path), {
             method: 'PUT',
             body: { message: '写真を追加: ' + item.path, content: b64, branch: BRANCH }
-          });
+          }).then(function () { item.uploaded = true; });
         });
       });
-    }, Promise.resolve()).then(function () {
-      pendingImages = pendingImages.filter(function (i) { return queue.indexOf(i) === -1; });
-    });
+    }, Promise.resolve());
   }
 
   // ---------------------------------------------------------------- フォーム
@@ -290,17 +347,18 @@
   function resetForm() {
     editing = null;
     coverPath = '';
-    pendingImages = [];
+    photos.forEach(function (p) { if (!p.uploaded && p.url) URL.revokeObjectURL(p.url); });
+    photos = [];
     $('f-title').value = '';
     $('f-date').value = today();
     $('f-category').value = '';
     $('f-slug').value = '';
     $('f-slug').readOnly = false;
     $('f-body').value = '';
-    $('f-cover-file').value = '';
-    $('cover-preview').hidden = true;
+    $('photo-file').value = '';
     $('publish-label').textContent = 'この内容で公開する';
     $('cancel-edit').hidden = true;
+    renderPhotos();
     updatePreview();
   }
 
@@ -339,32 +397,35 @@
     var msg = $('msg');
     var f = form();
     if (!f.title) { show(msg, 'タイトルを入力してください。', 'err'); $('f-title').focus(); return; }
-    if (!f.body.trim()) { show(msg, '本文を入力してください。', 'err'); $('f-body').focus(); return; }
+    if (!f.body.trim() && !photos.length) {
+      show(msg, '本文か写真のどちらかを入れてください。', 'err');
+      $('f-body').focus();
+      return;
+    }
 
     var slug = f.slug || autoSlug(f.date);
     if (!/^[0-9a-z][0-9a-z-]*$/.test(slug)) {
-      show(msg, '記事のURL名は半角の小文字英数字とハイフンだけで入力してください。', 'err');
-      $('f-slug').focus();
+      show(msg, '記事のURL名は半角の小文字英数字とハイフンだけで入力してください。（「詳しい設定」の中にあります）', 'err');
       return;
     }
 
     var path = editing ? editing.path : POSTS_DIR + '/' + f.date + '-' + slug + '.md';
     var btn = $('publish');
     btn.classList.add('adm-busy');
-    show(msg, '公開しています…（写真がある場合は少し時間がかかります）', 'info');
+    show(msg, '公開しています…', 'info');
 
-    uploadPending()
+    uploadPhotos()
       .then(function () {
         if (editing) return null;
-        // 同名の記事がないか確認する
         return api(repoPath(path)).then(function () {
-          throw new Error('同じURL名の記事がすでにあります。「記事のURL名」を変えてください。');
+          throw new Error('同じURL名の記事がすでにあります。「詳しい設定」の記事のURL名を変えてください。');
         }, function (err) {
           if (err.status === 404) return null;
           throw err;
         });
       })
       .then(function () {
+        show(msg, '記事を保存しています…', 'info');
         var body = {
           message: (editing ? 'ブログ記事を更新: ' : 'ブログ記事を追加: ') + f.title,
           content: b64encode(buildMarkdown(f)),
@@ -379,8 +440,7 @@
         resetForm();
         show(msg,
           '<strong>' + (wasEditing ? '記事を更新しました。' : '記事を公開しました。') + '</strong><br>' +
-          '1〜2分後に <a href="blog/" target="_blank" rel="noopener" style="text-decoration:underline">ブログページ</a> に反映されます。' +
-          '（反映状況は <a href="https://github.com/' + OWNER + '/' + REPO + '/actions" target="_blank" rel="noopener" style="text-decoration:underline">こちら</a> で確認できます）',
+          '1〜2分後に <a href="blog/" target="_blank" rel="noopener" style="text-decoration:underline">ブログページ</a> に反映されます。',
           'ok');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       })
@@ -430,7 +490,7 @@
           box.innerHTML = posts.map(function (p, i) {
             return '<div class="adm-item">' +
               '<div class="adm-item-main"><strong>' + esc(p.title) + '</strong>' +
-              '<span>' + esc(p.date) + (p.category ? '　' + esc(p.category) : '') + '　/　' + esc(p.name) + '</span></div>' +
+              '<span>' + esc(p.date) + (p.category ? '　' + esc(p.category) : '') + '</span></div>' +
               '<button class="adm-mini" data-edit="' + i + '" type="button">書き直す</button>' +
               '<button class="adm-mini danger" data-del="' + i + '" type="button">削除</button>' +
               '</div>';
@@ -451,9 +511,13 @@
     show($('msg'), '読み込んでいます…', 'info');
     api(repoPath(post.path)).then(function (data) {
       var parsed = parseMarkdown(b64decode(data.content));
-      pendingImages = [];
+      photos.forEach(function (p) { if (!p.uploaded && p.url) URL.revokeObjectURL(p.url); });
+      photos = [];
       editing = { path: post.path, sha: data.sha };
       coverPath = parsed.meta.cover || '';
+      if (coverPath) {
+        photos.push({ path: coverPath, url: coverPath, uploaded: true });
+      }
       $('f-title').value = parsed.meta.title || '';
       $('f-date').value = parsed.meta.date || post.date || today();
       $('f-category').value = parsed.meta.category || '';
@@ -461,15 +525,10 @@
       $('f-slug').value = slugMatch ? slugMatch[1] : '';
       $('f-slug').readOnly = true;
       $('f-body').value = parsed.body;
-      $('f-cover-file').value = '';
-      if (coverPath) {
-        $('cover-img').src = coverPath;
-        $('cover-preview').hidden = false;
-      } else {
-        $('cover-preview').hidden = true;
-      }
+      $('photo-file').value = '';
       $('publish-label').textContent = 'この内容で更新する';
       $('cancel-edit').hidden = false;
+      renderPhotos();
       updatePreview();
       switchTab('write');
       show($('msg'), '「' + esc(parsed.meta.title || post.name) + '」を読み込みました。書き直して「この内容で更新する」を押してください。', 'info');
@@ -509,9 +568,8 @@
     $('app').hidden = false;
     $('signout').hidden = false;
     if (!$('f-date').value) $('f-date').value = today();
-    if (restoreDraft()) {
-      show($('msg'), '前回の書きかけの内容を復元しました。', 'info');
-    }
+    if (restoreDraft()) show($('msg'), '前回の書きかけの内容を復元しました。', 'info');
+    renderPhotos();
     updatePreview();
   }
 
@@ -524,7 +582,7 @@
   function saveToken() {
     var value = $('token').value.trim();
     var msg = $('setup-msg');
-    if (!value) { show(msg, '接続キーを貼り付けてください。', 'err'); return; }
+    if (!value) { show(msg, 'ログインキーを貼り付けてください。', 'err'); return; }
     show(msg, '接続を確認しています…', 'info');
     token = value;
     api('/repos/' + OWNER + '/' + REPO).then(function () {
@@ -559,7 +617,7 @@
 
     $('signout').addEventListener('click', function (e) {
       e.preventDefault();
-      if (!window.confirm('この端末に保存した接続キーを消します。よろしいですか？')) return;
+      if (!window.confirm('この端末に保存したログインキーを消します。よろしいですか？')) return;
       try { localStorage.removeItem(TOKEN_KEY); } catch (err) { /* noop */ }
       token = '';
       enterSetup();
@@ -584,41 +642,50 @@
       });
     });
 
-    $('ins-img').addEventListener('click', function () { $('body-img-file').click(); });
-
-    $('body-img-file').addEventListener('change', function () {
-      var file = this.files && this.files[0];
-      if (!file) return;
-      show($('msg'), '写真を準備しています…', 'info');
-      stageImage(file).then(function (item) {
-        insert('\n![写真](' + item.path + ')\n', '', '');
-        show($('msg'), '写真を本文に入れました。公開ボタンを押すとアップロードされます。', 'ok');
-      }).catch(function (err) {
-        show($('msg'), esc(err.message), 'err');
-      });
+    // 写真の追加（ボタン・ドラッグ&ドロップ・貼り付け）
+    $('pick-photos').addEventListener('click', function () { $('photo-file').click(); });
+    $('photo-file').addEventListener('change', function () {
+      addFiles(this.files);
       this.value = '';
     });
 
-    $('f-cover-file').addEventListener('change', function () {
-      var file = this.files && this.files[0];
-      if (!file) return;
-      show($('msg'), '写真を準備しています…', 'info');
-      stageImage(file).then(function (item) {
-        coverPath = item.path;
-        $('cover-img').src = item.url;
-        $('cover-preview').hidden = false;
-        updatePreview();
-        show($('msg'), 'アイキャッチ写真を設定しました。公開ボタンを押すとアップロードされます。', 'ok');
-      }).catch(function (err) {
-        show($('msg'), esc(err.message), 'err');
-      });
+    var drop = $('drop');
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); });
+    });
+    ['dragleave', 'drop'].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+    });
+    drop.addEventListener('drop', function (e) {
+      if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
     });
 
-    $('f-cover-clear').addEventListener('click', function () {
-      coverPath = '';
-      $('f-cover-file').value = '';
-      $('cover-preview').hidden = true;
-      updatePreview();
+    document.addEventListener('paste', function (e) {
+      if ($('pane-write').hidden || !e.clipboardData) return;
+      var files = [];
+      Array.prototype.forEach.call(e.clipboardData.items || [], function (item) {
+        if (item.kind === 'file' && /^image\//.test(item.type)) {
+          var f = item.getAsFile();
+          if (f) files.push(f);
+        }
+      });
+      if (files.length) { e.preventDefault(); addFiles(files); }
+    });
+
+    $('photo-list').addEventListener('click', function (e) {
+      var cover = e.target.closest('[data-cover]');
+      var ins = e.target.closest('[data-insert]');
+      var rm = e.target.closest('[data-remove]');
+      if (cover) {
+        coverPath = photos[Number(cover.dataset.cover)].path;
+        renderPhotos();
+        updatePreview();
+      } else if (ins) {
+        insert('\n![写真](' + photos[Number(ins.dataset.insert)].path + ')\n', '', '');
+        show($('msg'), '本文に写真を入れました。', 'ok');
+      } else if (rm) {
+        removePhoto(Number(rm.dataset.remove));
+      }
     });
 
     $('publish').addEventListener('click', publish);

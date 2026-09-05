@@ -365,3 +365,9 @@ textarea.input { min-height: 90px; resize: vertical; }
   .blog-navlink-next { text-align: left; }
   .blog-body p, .blog-body li { font-size: 15px; }
 }
+
+/* ------------------------------------------------ フリーダイヤルのマーク */
+.freemark { flex: none; display: block; color: inherit; }
+.freemark .fm-ring { fill: none; stroke: currentColor; stroke-width: 4.2; stroke-linecap: round; }
+.freemark .fm-text { fill: currentColor; font-family: Barlow, var(--font-heading), sans-serif; font-weight: 700; font-size: 17.5px; }
+.freemark .fm-phone { fill: currentColor; stroke: var(--freemark-bg, #fff); stroke-width: 2.4; stroke-linejoin: round; paint-order: stroke; }
