@@ -35,7 +35,8 @@
 .yen{font-family:"Barlow Condensed",sans-serif;font-weight:700;line-height:1;color:var(--color-accent-700)}
 .note{font-size:12.5px;line-height:1.9;margin:0;opacity:.7}
 .calc{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:19px}
-.chip{border:1px solid var(--color-divider);padding:8px 12px;display:grid;gap:2px;background:#fff}
+.chip{border:1px solid var(--color-divider);padding:10px 14px;display:grid;gap:2px;background:#fff;justify-items:center;text-align:center}
+.chip-ico{width:24px;height:24px;color:var(--color-accent);margin-bottom:3px}
 .chip small{font-family:"Barlow","Noto Sans JP",sans-serif;font-weight:400;font-size:10.5px;letter-spacing:.04em;opacity:.62}
 @media (max-width:1024px){.g3{grid-template-columns:repeat(2,1fr)}.split,.g2{grid-template-columns:1fr;gap:32px}.h1{font-size:37px}.h2{font-size:28px}.sec{padding-top:58px}}
 @media (max-width:640px){.g2,.g3{grid-template-columns:1fr;gap:18px}.h1{font-size:30px}.h2{font-size:25px}.sec{padding-top:46px}}
@@ -204,8 +205,8 @@
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div style="font-size:14.5px;line-height:1.8">スタッフ1名でお伺いし、<strong>1時間以内</strong>で作業した場合</div>
       <div class="calc">
-        <span class="chip">3,300円<small>作業費</small></span><span>+</span>
-        <span class="chip">2,200円<small>出張費</small></span><span>=</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"></circle><path d="M12 8.5v6.5"></path><path d="M7.5 11h9"></path><path d="M12 15l-3 6"></path><path d="M12 15l3 6"></path></svg>3,300円<small>作業費</small></span><span>+</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="4.5" r="2.6"></circle><path d="M16.2 8.4l-3.9 2.2 1 3.6"></path><path d="M16.2 8.4l2.6 3 3 .5"></path><path d="M13.3 14.2l-2.7 3.6-3.8.5"></path><path d="M13.3 14.2l1.6 3.4 1.9 3.2"></path></svg>2,200円<small>出張費</small></span><span>=</span>
         <span class="yen" style="font-size:38px">¥5,500</span>
       </div>
       <div style="font-size:12.5px;opacity:.65">（税込）</div>
@@ -214,8 +215,8 @@
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div style="font-size:14.5px;line-height:1.8">スタッフ1名でお伺いし、<strong>2時間以内</strong>で作業した場合</div>
       <div class="calc">
-        <span class="chip">6,600円<small>3,300円 × 2時間</small></span><span>+</span>
-        <span class="chip">2,200円<small>出張費</small></span><span>=</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"></circle><path d="M12 8.5v6.5"></path><path d="M7.5 11h9"></path><path d="M12 15l-3 6"></path><path d="M12 15l3 6"></path></svg>6,600円<small>3,300円 × 2時間</small></span><span>+</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="4.5" r="2.6"></circle><path d="M16.2 8.4l-3.9 2.2 1 3.6"></path><path d="M16.2 8.4l2.6 3 3 .5"></path><path d="M13.3 14.2l-2.7 3.6-3.8.5"></path><path d="M13.3 14.2l1.6 3.4 1.9 3.2"></path></svg>2,200円<small>出張費</small></span><span>=</span>
         <span class="yen" style="font-size:38px">¥8,800</span>
       </div>
       <div style="font-size:12.5px;opacity:.65">（税込）例）部屋の片付け、家具の組立、荷造り・荷解き等</div>
@@ -224,9 +225,9 @@
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div style="font-size:14.5px;line-height:1.8">スタッフ1名でお伺いし、車両や道具が必要な作業を<strong>1時間以内</strong>で作業した場合</div>
       <div class="calc">
-        <span class="chip">3,300円<small>作業費</small></span><span>+</span>
-        <span class="chip">2,200円<small>出張費</small></span><span>+</span>
-        <span class="chip">3,300円<small>車両費</small></span><span>=</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"></circle><path d="M12 8.5v6.5"></path><path d="M7.5 11h9"></path><path d="M12 15l-3 6"></path><path d="M12 15l3 6"></path></svg>3,300円<small>作業費</small></span><span>+</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="4.5" r="2.6"></circle><path d="M16.2 8.4l-3.9 2.2 1 3.6"></path><path d="M16.2 8.4l2.6 3 3 .5"></path><path d="M13.3 14.2l-2.7 3.6-3.8.5"></path><path d="M13.3 14.2l1.6 3.4 1.9 3.2"></path></svg>2,200円<small>出張費</small></span><span>+</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h11v9.5H2z"></path><path d="M13 8.8h4l3 3.2V15h-7z"></path><circle cx="7" cy="17.6" r="2"></circle><circle cx="17" cy="17.6" r="2"></circle></svg>3,300円<small>車両費</small></span><span>=</span>
         <span class="yen" style="font-size:38px">¥8,800</span>
       </div>
       <div style="font-size:12.5px;opacity:.65">（税込）</div>
@@ -235,9 +236,9 @@
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div style="font-size:14.5px;line-height:1.8">スタッフ2名でお伺いし、車両や道具が必要な作業を<strong>1時間以内</strong>で作業した場合</div>
       <div class="calc">
-        <span class="chip">6,600円<small>3,300円 × 2名</small></span><span>+</span>
-        <span class="chip">4,400円<small>2,200円 × 2名</small></span><span>+</span>
-        <span class="chip">3,300円<small>車両費</small></span><span>=</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"></circle><path d="M12 8.5v6.5"></path><path d="M7.5 11h9"></path><path d="M12 15l-3 6"></path><path d="M12 15l3 6"></path></svg>6,600円<small>3,300円 × 2名</small></span><span>+</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="4.5" r="2.6"></circle><path d="M16.2 8.4l-3.9 2.2 1 3.6"></path><path d="M16.2 8.4l2.6 3 3 .5"></path><path d="M13.3 14.2l-2.7 3.6-3.8.5"></path><path d="M13.3 14.2l1.6 3.4 1.9 3.2"></path></svg>4,400円<small>2,200円 × 2名</small></span><span>+</span>
+        <span class="chip"><svg class="chip-ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h11v9.5H2z"></path><path d="M13 8.8h4l3 3.2V15h-7z"></path><circle cx="7" cy="17.6" r="2"></circle><circle cx="17" cy="17.6" r="2"></circle></svg>3,300円<small>車両費</small></span><span>=</span>
         <span class="yen" style="font-size:38px">¥14,300</span>
       </div>
       <div style="font-size:12.5px;opacity:.65">（税込）例）部屋の片付け、家具の組立、荷造り・荷解き等</div>
