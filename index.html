@@ -45,13 +45,13 @@
 .kanban-tel{display:inline-flex;align-items:center;gap:14px;margin-top:14px;color:var(--red)}
 .kanban-free{width:clamp(40px,5.6vw,64px);height:clamp(40px,5.6vw,64px)}
 .kanban-telno{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:clamp(34px,5.6vw,62px);letter-spacing:.03em;line-height:1;white-space:nowrap}
-.kanban-list{display:grid;grid-template-columns:1fr 1fr;gap:11px 34px;margin:24px 0 0;padding:0;list-style:none}
+.kanban-list{display:grid;grid-template-rows:repeat(6,auto);grid-auto-flow:column;grid-auto-columns:1fr;gap:11px 34px;margin:24px 0 0;padding:0;list-style:none}
 .kanban-list li{display:flex;align-items:baseline;gap:11px;font-weight:700;font-size:clamp(14px,1.4vw,16.5px)}
 .kanban-list li::before{content:"";flex:none;width:11px;height:11px;border-radius:50%;background:var(--color-accent);transform:translateY(1px)}
 @media (max-width:1024px){.g3{grid-template-columns:repeat(2,1fr)}.hero,.split{grid-template-columns:1fr;gap:34px}.h2{font-size:31px}.sec{padding-top:62px}}
 @media (max-width:760px){.kanban-grid{grid-template-columns:1fr;gap:26px}.kanban-list{gap:9px 18px}}
 @media (max-width:640px){.g2,.g3{grid-template-columns:1fr;gap:18px}.h2{font-size:27px}.sec{padding-top:50px}}
-@media (max-width:480px){.kanban-list{grid-template-columns:1fr}}
+@media (max-width:480px){.kanban-list{grid-auto-flow:row;grid-template-rows:none;grid-template-columns:1fr}}
 </style>
 <script type="application/ld+json">
 {
@@ -207,12 +207,17 @@
           <span class="kanban-telno">0120-542-587</span>
         </a>
         <ul class="kanban-list">
-          <li>引越</li><li>緊急配送</li>
-          <li>エアコン工事</li><li>貸切便</li>
+          <li>引越</li>
+          <li>エアコン工事</li>
+          <li>ハウスクリーニング</li>
+          <li>草刈・剪定</li>
+          <li>水回りメンテナンス</li>
+          <li>緊急配送</li>
+          <li>貸切便</li>
           <li>定期便</li>
-          <li>ハウスクリーニング</li><li>配送助手</li>
-          <li>草刈・剪定</li><li>家財・家電の配送</li>
-          <li>水回りメンテナンス</li><li>家具移動</li>
+          <li>配送助手</li>
+          <li>家財・家電の配送</li>
+          <li>家具移動</li>
         </ul>
       </div>
     </div>
