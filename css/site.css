@@ -199,7 +199,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 .navlinks a { color: var(--color-text); }
 .navlinks a:hover, .navlinks a.on { color: var(--color-accent-700); }
 .header-cta { display: flex; align-items: center; gap: 14px; }
-.telno { display: grid; line-height: 1.05; color: var(--color-text); }
+.telno { display: flex; align-items: center; gap: 9px; line-height: 1.05; color: var(--color-text); }
 .telno:hover { color: var(--color-text); }
 .telno-label { font-size: 9.5px; letter-spacing: .14em; color: var(--color-accent-700); }
 .telno-number { font-family: var(--font-heading); font-weight: 700; font-size: 23px; letter-spacing: .02em; }
@@ -241,7 +241,8 @@ textarea.input { min-height: 90px; resize: vertical; }
 .drawer-link.on { color: var(--color-accent-700); font-weight: 700; }
 .drawer-cta { display: grid; gap: 12px; margin-top: 22px; }
 .drawer-tel {
-  display: grid; justify-items: center; line-height: 1.05; color: var(--color-text);
+  display: flex; align-items: center; justify-content: center; gap: 11px;
+  line-height: 1.05; color: var(--color-text);
   border: 1px solid var(--color-divider); padding: 14px; text-align: center;
 }
 .drawer-tel:hover { color: var(--color-text); }
@@ -371,3 +372,16 @@ textarea.input { min-height: 90px; resize: vertical; }
 .freemark .fm-ring { fill: none; stroke: currentColor; stroke-width: 4.2; stroke-linecap: round; }
 .freemark .fm-text { fill: currentColor; font-family: Barlow, var(--font-heading), sans-serif; font-weight: 700; font-size: 17.5px; }
 .freemark .fm-phone { fill: currentColor; stroke: var(--freemark-bg, #fff); stroke-width: 2.4; stroke-linejoin: round; paint-order: stroke; }
+
+/* --------------------------------------------- 携帯番号のスマホアイコン */
+.phonemark { flex: none; display: block; color: inherit; }
+.phonemark .pm-body { fill: currentColor; }
+.phonemark .pm-screen { fill: var(--phonemark-screen, #fff); }
+.telno-text { display: grid; line-height: 1.05; }
+.telno .phonemark { width: 26px; height: 26px; }
+.drawer-tel .telno-text { justify-items: center; text-align: center; }
+.drawer-tel .phonemark { width: 30px; height: 30px; }
+.tel-cta { display: flex; align-items: center; gap: 12px; color: var(--color-text); }
+.tel-cta:hover { color: var(--color-text); }
+.tel-cta .phonemark { width: 40px; height: 40px; }
+.tel-cta-text { display: grid; line-height: 1.05; }
