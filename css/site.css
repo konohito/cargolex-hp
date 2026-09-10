@@ -199,7 +199,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 .navlinks a { color: var(--color-text); }
 .navlinks a:hover, .navlinks a.on { color: var(--color-accent-700); }
 .header-cta { display: flex; align-items: center; gap: 14px; }
-.telno { display: flex; align-items: center; gap: 9px; line-height: 1.05; color: var(--color-text); }
+.telno { display: grid; line-height: 1.05; color: var(--color-text); }
 .telno:hover { color: var(--color-text); }
 .telno-label { font-size: 9.5px; letter-spacing: .14em; color: var(--color-accent-700); }
 .telno-number { font-family: var(--font-heading); font-weight: 700; font-size: 23px; letter-spacing: .02em; }
@@ -241,8 +241,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 .drawer-link.on { color: var(--color-accent-700); font-weight: 700; }
 .drawer-cta { display: grid; gap: 12px; margin-top: 22px; }
 .drawer-tel {
-  display: flex; align-items: center; justify-content: center; gap: 11px;
-  line-height: 1.05; color: var(--color-text);
+  display: grid; justify-items: center; line-height: 1.05; color: var(--color-text);
   border: 1px solid var(--color-divider); padding: 14px; text-align: center;
 }
 .drawer-tel:hover { color: var(--color-text); }
@@ -374,14 +373,23 @@ textarea.input { min-height: 90px; resize: vertical; }
 .freemark .fm-phone { fill: currentColor; stroke: var(--freemark-bg, #fff); stroke-width: 2.4; stroke-linejoin: round; paint-order: stroke; }
 
 /* --------------------------------------------- 携帯番号のスマホアイコン */
-.phonemark { flex: none; display: block; color: inherit; }
+/*
+  アイコンは番号スパンの中に置き、数字の中央の高さにそろえる。
+  1cap = その書体の大文字・数字の高さ。数字は必ずベースラインから cap までに
+  収まるので、アイコンの中心を 0.5cap の位置に置けば文字サイズが変わっても
+  上下の中央が合う。cap 単位に未対応の場合は 1行目の指定が使われる。
+*/
+.phonemark {
+  display: inline-block; color: inherit;
+  width: var(--pm-size); height: var(--pm-size); margin-right: var(--pm-gap);
+  vertical-align: -0.04em;
+  vertical-align: calc(0.5cap - var(--pm-size) / 2);
+}
 .phonemark .pm-body { fill: currentColor; }
 .phonemark .pm-screen { fill: var(--phonemark-screen, #fff); }
-.telno-text { display: grid; line-height: 1.05; }
-.telno .phonemark { width: 26px; height: 26px; }
-.drawer-tel .telno-text { justify-items: center; text-align: center; }
-.drawer-tel .phonemark { width: 30px; height: 30px; }
-.tel-cta { display: flex; align-items: center; gap: 12px; color: var(--color-text); }
+.telno .phonemark { --pm-size: 21px; --pm-gap: 8px; }
+.drawer-tel .phonemark { --pm-size: 26px; --pm-gap: 10px; }
+.tel-cta .phonemark { --pm-size: 33px; --pm-gap: 11px; }
+.tel-cta { display: grid; line-height: 1.05; color: var(--color-text); }
 .tel-cta:hover { color: var(--color-text); }
-.tel-cta .phonemark { width: 40px; height: 40px; }
-.tel-cta-text { display: grid; line-height: 1.05; }
+.tel-cta-label + .tel-cta-number { margin-top: 4px; }
