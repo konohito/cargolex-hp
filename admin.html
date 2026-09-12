@@ -80,6 +80,27 @@ body { padding-bottom: 40px; }
 .adm-steps code { background: var(--color-neutral-100); padding: 2px 6px; font-size: 13px; word-break: break-all; }
 .adm-more { border: 1px solid var(--color-divider); padding: 14px 16px; margin: 16px 0; }
 .adm-more summary { cursor: pointer; font-size: 13.5px; font-weight: 700; }
+
+/* 英語の画面の案内 */
+.adm-warn {
+  background: rgba(247, 209, 23, .16); border: 1px solid rgba(199, 166, 10, .55);
+  padding: 14px 16px; font-size: 13.5px; line-height: 1.9; margin: 0 0 18px;
+}
+.adm-mean { display: block; font-size: 12.5px; line-height: 1.8; opacity: .72; margin-top: 4px; }
+.adm-mock {
+  border: 1px solid var(--color-divider); background: var(--color-neutral-100);
+  padding: 14px 16px; margin: 10px 0 4px; display: grid; gap: 9px; justify-items: start;
+}
+.adm-mock-label { font-size: 10.5px; letter-spacing: .16em; color: var(--color-accent-700); font-weight: 700; }
+.adm-mock-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.adm-mock-en { font-size: 13.5px; font-weight: 700; }
+.adm-mock-sel { border: 1px solid #8c959f; background: #fff; padding: 7px 13px; font-size: 13px; }
+.adm-mock-btn { background: #1f883d; color: #fff; font-size: 13.5px; font-weight: 700; padding: 9px 17px; }
+.adm-tblwrap { overflow-x: auto; margin-top: 12px; }
+.adm-tbl { border-collapse: collapse; font-size: 13px; }
+.adm-tbl th, .adm-tbl td { border: 1px solid var(--color-divider); padding: 8px 14px; text-align: left; }
+.adm-tbl th { background: var(--color-neutral-100); font-weight: 700; }
+.adm-tbl td:first-child { font-family: Barlow, sans-serif; white-space: nowrap; }
 .adm-busy { opacity: .5; pointer-events: none; }
 [hidden] { display: none !important; }
 @media (max-width: 900px) {
@@ -109,34 +130,12 @@ body { padding-bottom: 40px; }
   <section id="setup" hidden>
     <div class="adm-card">
       <h1 class="adm-h">はじめに：ログインキーの登録（初回だけ）</h1>
-      <p class="adm-note">この画面から投稿するために、GitHubの「ログインキー」を1回だけ登録します。3ステップ・2分ほどで終わります。<br>登録したキーはこの端末にだけ保存され、次回からは何もせずに書けます。</p>
+      <p class="adm-note">この画面から投稿するために、「ログインキー」を1回だけ登録します。<br>登録したキーはこの端末にだけ保存されるので、次回からは何もせずに書けます。</p>
       <div id="setup-msg"></div>
-      <ol class="adm-steps">
-        <li>
-          下のボタンを押してGitHubのページを開きます（GitHubにログインしてください）。<br>
-          <a class="btn btn-primary blueprint" href="https://github.com/settings/tokens/new?description=cargolex-blog&amp;scopes=repo" target="_blank" rel="noopener" style="padding:12px 22px;font-size:14.5px;margin-top:8px">
-            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-            GitHubでキーを作る
-          </a>
-        </li>
-        <li>開いたページで <strong>Expiration</strong>（有効期限）を <code>No expiration</code> に変え、一番下の緑色の <strong>Generate token</strong> ボタンを押します。<br><span style="font-size:13px;opacity:.75">※ 名前と権限はあらかじめ設定された状態で開きます。そのままで大丈夫です。</span></li>
-        <li>画面に出てきた <code>ghp_…</code> という文字列をコピーして、下の欄に貼り付けてください。</li>
-      </ol>
 
-      <details class="adm-more">
-        <summary>権限をこのホームページだけに限定したい方（上級者向け）</summary>
-        <ol class="adm-steps" style="margin-top:14px">
-          <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">こちらのページ</a>を開きます。</li>
-          <li><strong>Token name</strong> に <code>cargolex-blog</code> と入力します。</li>
-          <li><strong>Repository access</strong> で <code>Only select repositories</code> → <code>konohito/cargolex-hp</code> を選びます。</li>
-          <li><strong>Permissions</strong> → <strong>Repository permissions</strong> の <code>Contents</code> を <code>Read and write</code> にします。</li>
-          <li><strong>Generate token</strong> を押し、<code>github_pat_…</code> をコピーします。</li>
-        </ol>
-      </details>
-
-      <div class="adm-field">
-        <label for="token">ログインキー</label>
-        <input class="adm-input" id="token" type="password" autocomplete="off" placeholder="ここに貼り付けてください">
+      <div class="adm-field" style="margin-bottom:10px">
+        <label for="token">ログインキーを貼り付けてください</label>
+        <input class="adm-input" id="token" type="password" autocomplete="off" placeholder="ghp_ ではじまる長い文字列">
         <span class="hint">この画面は検索には出ません。キーを持っている人だけが投稿できます。</span>
       </div>
       <div class="adm-actions">
@@ -145,6 +144,82 @@ body { padding-bottom: 40px; }
           登録して始める
         </button>
       </div>
+      <p class="adm-note" style="margin:14px 0 0">キーをお持ちでない場合は、下の手順でご自身で作れます。</p>
+    </div>
+
+    <div class="adm-card" style="margin-top:22px">
+      <h2 class="adm-h">ログインキーの作り方</h2>
+
+      <div class="adm-warn">
+        <strong>この先はGitHubという英語のサイトが開きます。</strong>
+        英語のままで正常です。押す場所だけ下でご案内しますので、そのとおりに進めてください。
+      </div>
+
+      <ol class="adm-steps">
+        <li>
+          <strong>下のボタンを押します。</strong><br>
+          GitHubにログインしていない場合は、先にログイン画面が出ます。<br>
+          <a class="btn btn-primary blueprint" href="https://github.com/settings/tokens/new?description=cargolex-blog&amp;scopes=repo" target="_blank" rel="noopener" style="padding:12px 22px;font-size:14.5px;margin-top:10px">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            GitHubでキーを作る
+          </a>
+        </li>
+
+        <li>
+          <strong>「Expiration」の右にある選択欄を「No expiration」に変えます。</strong><br>
+          <span class="adm-mean">Expiration＝有効期限／No expiration＝期限なし</span>
+          <div class="adm-mock">
+            <div class="adm-mock-label">画面のイメージ</div>
+            <div class="adm-mock-row">
+              <span class="adm-mock-en">Expiration</span>
+              <span class="adm-mock-sel">No expiration ▾</span>
+            </div>
+          </div>
+          <span class="adm-mean">名前と権限は、はじめから入った状態で開きます。そのままで大丈夫です。</span>
+        </li>
+
+        <li>
+          <strong>いちばん下までスクロールして、緑色の「Generate token」ボタンを押します。</strong><br>
+          <span class="adm-mean">Generate token＝キーを作る</span>
+          <div class="adm-mock">
+            <div class="adm-mock-label">画面のイメージ</div>
+            <span class="adm-mock-btn">Generate token</span>
+          </div>
+        </li>
+
+        <li>
+          <strong><code>ghp_</code> ではじまる長い文字列が出てきます。</strong><br>
+          右側のコピーのマークを押してコピーし、<strong>この画面の上の欄に貼り付けて「登録して始める」</strong>を押してください。<br>
+          <span class="adm-mean">この文字列は一度閉じると二度と見られません。貼り付けるまでGitHubの画面は閉じないでください。</span>
+        </li>
+      </ol>
+
+      <details class="adm-more">
+        <summary>英語の画面に出てくる言葉の意味</summary>
+        <div class="adm-tblwrap">
+          <table class="adm-tbl">
+            <tr><th>英語</th><th>意味</th></tr>
+            <tr><td>Note / Token name</td><td>キーの名前</td></tr>
+            <tr><td>Expiration</td><td>有効期限</td></tr>
+            <tr><td>No expiration</td><td>期限なし</td></tr>
+            <tr><td>Select scopes</td><td>できることを選ぶ</td></tr>
+            <tr><td>repo</td><td>ホームページを書き換える権限</td></tr>
+            <tr><td>Generate token</td><td>キーを作る</td></tr>
+            <tr><td>Copy</td><td>コピーする</td></tr>
+          </table>
+        </div>
+      </details>
+
+      <details class="adm-more">
+        <summary>権限をこのホームページだけに限定したい方（上級者向け）</summary>
+        <ol class="adm-steps" style="margin-top:14px">
+          <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">こちらのページ</a>を開きます。</li>
+          <li><strong>Token name</strong>（キーの名前）に <code>cargolex-blog</code> と入力します。</li>
+          <li><strong>Repository access</strong>（対象の選択）で <code>Only select repositories</code> → <code>konohito/cargolex-hp</code> を選びます。</li>
+          <li><strong>Permissions</strong> → <strong>Repository permissions</strong> の <code>Contents</code> を <code>Read and write</code>（読み書き）にします。</li>
+          <li><strong>Generate token</strong> を押し、<code>github_pat_…</code> をコピーします。</li>
+        </ol>
+      </details>
     </div>
   </section>
 
@@ -204,6 +279,7 @@ body { padding-bottom: 40px; }
             <div class="adm-field">
               <label for="f-date">日付</label>
               <input class="adm-input" id="f-date" type="date">
+              <span class="hint" id="f-date-ja"></span>
             </div>
           </div>
 
