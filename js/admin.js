@@ -300,8 +300,19 @@
     };
   }
 
+  // 端末の設定によっては日付欄が 09/12/2026 のような表記になるため、
+  // 日本語の読み方をそのまま下に出しておく。
+  function dateJa(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+    if (!m) return '';
+    var week = ['日', '月', '火', '水', '木', '金', '土'];
+    var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return m[1] + '年' + Number(m[2]) + '月' + Number(m[3]) + '日（' + week[d.getDay()] + '）';
+  }
+
   function updatePreview() {
     var f = form();
+    $('f-date-ja').textContent = dateJa(f.date);
     $('p-date').textContent = f.date.replace(/-/g, '.');
     var cat = $('p-cat');
     cat.textContent = f.category;
