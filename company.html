@@ -39,7 +39,8 @@
 @media (max-width:1024px){.g3,.g4{grid-template-columns:repeat(2,1fr)}.split,.g2{grid-template-columns:1fr;gap:32px}.h1{font-size:36px}.h2{font-size:28px}.sec{padding-top:58px}}
 @media (max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr;gap:18px}.h1{font-size:29px}.h2{font-size:25px}.sec{padding-top:46px}}
 .veh-photo{background:linear-gradient(180deg,#f7f7f3,#e9ece6)}
-@media (max-width:640px){.g2.veh-thumbs{grid-template-columns:1fr 1fr}}
+.g3.veh-thumbs{grid-template-columns:repeat(3,1fr)}
+@media (max-width:640px){.g3.veh-thumbs{gap:10px}.veh-thumbs img{height:110px!important}}
 </style>
 </head>
 <body>
@@ -201,17 +202,17 @@
     <figure class="blueprint veh-photo" style="padding:24px;margin:0">
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div style="position:relative;max-width:380px;margin:0 auto">
-        <img src="assets/img/truck-cargo.webp" alt="荷室の寸法：幅1,400mm、高さ2,100mm（低い状態で1,800mm）" width="676" height="1000" loading="lazy" style="width:100%;height:auto;display:block">
-        <svg viewBox="0 0 850 1258" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+        <img src="assets/img/truck-cargo.webp" alt="荷室の寸法：幅1,400mm、高さ2,100mm（低い状態で1,800mm）" width="649" height="1000" loading="lazy" style="width:100%;height:auto;display:block">
+        <svg viewBox="0 0 772 1190" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
           <defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#f7d117"/></marker></defs>
           <g stroke="#f7d117" stroke-width="9" stroke-linecap="round" marker-start="url(#ah)" marker-end="url(#ah)">
-            <line x1="745" y1="985" x2="745" y2="178"/>
-            <line x1="160" y1="985" x2="790" y2="985"/>
+            <line x1="690" y1="962" x2="690" y2="152"/>
+            <line x1="112" y1="962" x2="742" y2="962"/>
           </g>
           <g font-family="Barlow Condensed, sans-serif" font-weight="700" fill="#f7d117" stroke="rgba(0,0,0,.55)" stroke-width="7" paint-order="stroke">
-            <text x="720" y="250" text-anchor="end" font-size="66">2,100mm</text>
-            <text x="720" y="315" text-anchor="end" font-size="48">（1,800mm）</text>
-            <text x="180" y="955" font-size="66">1,400mm</text>
+            <text x="668" y="228" text-anchor="end" font-size="62">2,100mm</text>
+            <text x="668" y="288" text-anchor="end" font-size="45">（1,800mm）</text>
+            <text x="132" y="934" font-size="62">1,400mm</text>
           </g>
         </svg>
       </div>
@@ -228,7 +229,11 @@
           </tbody>
         </table>
       </div>
-      <div class="g2 veh-thumbs" style="margin-top:28px;gap:16px">
+      <div class="g3 veh-thumbs" style="margin-top:28px;gap:14px">
+        <figure class="blueprint veh-photo" style="padding:12px;margin:0">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <img src="assets/img/truck-front-straight.webp" alt="正面" width="727" height="1000" loading="lazy" style="width:100%;height:170px;object-fit:contain;display:block">
+        </figure>
         <figure class="blueprint veh-photo" style="padding:12px;margin:0">
           <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
           <img src="assets/img/truck-side.webp" alt="あおりを開けた荷台（側面）" width="1000" height="942" loading="lazy" style="width:100%;height:170px;object-fit:contain;display:block">
