@@ -2,8 +2,8 @@
 
 ブログは**専用の投稿画面**から書けます。スマホでもパソコンでも使えます。
 
-- 投稿画面: https://konohito.github.io/cargolex-hp/admin.html
-- 公開されるブログ: https://konohito.github.io/cargolex-hp/blog/
+- 投稿画面: https://cargolex0369.com/admin.html
+- 公開されるブログ: https://cargolex0369.com/blog/
 
 投稿画面はブックマークしておくと便利です（検索には出ないページです）。
 

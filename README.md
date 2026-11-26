@@ -2,7 +2,7 @@
 
 熊本の軽貨物運送支援事業・生活支援サービス事業「カーゴレックス」のホームページです。
 
-公開URL: https://konohito.github.io/cargolex-hp/
+公開URL: https://cargolex0369.com/
 
 ## 構成
 
